@@ -1,34 +1,28 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import AlbumDetail from './AlbumDetail';
 import axios from 'axios';
 
 class AlbumList extends Component {
    //set up initial state
-   state = {
-      album: [
+   state = { albums: [] };
 
-      ]
-   }
    componentWillMount() {
-      axios.get("https://rallycoding.herokuapp.com/api/music_albums")
-      .then(response => this.setState({album: response.data}))
+      axios.get('https://rallycoding.herokuapp.com/api/music_albums')
+      .then(response => this.setState({albums: response.data}));
+   }
+
+   renderAlbum() {
+      return this.state.albums.map(album => <AlbumDetail album={album} key={album.title}/>);
    }
 
    render() {
       return (
-         <View>
-            <Text style={styles.textStyle}>
-               Album lists will be shown here!
-            </Text>
-         </View>
+         <ScrollView>
+            {this.renderAlbum()}
+         </ScrollView>
       );
-   }
+   };
 }
-
-const styles = StyleSheet.create({
-   textStyle: {
-      padding: 10
-   }
-});
 
 export default AlbumList;
